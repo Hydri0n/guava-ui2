@@ -21,7 +21,6 @@
     </template>      
       </el-autocomplete>
       </div> -->
-      <image src="../assets/logo.png" class="image"/>
       <div style="width: 50%; margin: auto">
         <input class="el-input__inner" id="search-poi" placeholder="Please input" />
       </div>
@@ -42,7 +41,8 @@ export default {
       map: {},
       autocomplete: {},
       city: '南昌',
-      aimMarker: null
+      aimMarker: null,
+      markerEnableTag: false //
     }
   },
   props: {
@@ -59,6 +59,9 @@ export default {
       handleSelect(item) {
         console.log(item)
     },
+      addPOi(name) {
+    console.log("child addPOi", name)
+  },
     querySearch(key, cb) {
         this.autocomplete.search(key, function(status, result) {
             console.log(key, result);
@@ -83,15 +86,22 @@ export default {
     callback_openDetailWindow(poiDetail) {
       if (this.aimMarker != null) {
         this.map.setCenter(this.aimMarker.getPosition());
+        if (this.map.getZoom() < 14) {
+          this.map.setZoom(14);
+        }
         let photos = poiDetail.photos;
-        var image = (photos.length == 0) ? './assets/logo.png' : photos[0].url;
+        var image = (photos.length == 0) ? '../assets/logo.png' : photos[0].url;
         var infoWindow = new AMap.InfoWindow({
           isCustom: true,  //使用自定义窗体
           content: createPoiWindow(poiDetail.name, poiDetail.address, image),
         });
         infoWindow.open(this.map, this.aimMarker.getPosition());
+        this.markerEnableTag = true;
         console.log(1);
       }
+    },
+    addPoiToList(poi) {
+      this.$parent.$emit(poi)
     },
     createInfoWindow(title, content, image) {
     var info = document.createElement("el-card");
@@ -128,6 +138,7 @@ export default {
       this.map.clearInfoWindow();
     },
     initMap() {
+      this.markerEnableTag = false
         let self = this
         let map = new AMap.Map('container', {
           resizeEnable: true,
@@ -162,7 +173,28 @@ export default {
               }
           });
         })
+        map.on('hotspotclick', function(result) {
+          console.log("xxx   ", result)
+          self.markerEnableTag = false;
+          self.setAimMarker(result.lnglat.lng, result.lnglat.lat, result.name)
+          placeSearch.getDetails(result.id, function(status, result) {
+            console.log("aaa   ", result)
+            if (status === 'complete' && result.info === 'OK') {
+                let poi = result.poiList.pois[0]
+                console.log("bbb   ", poi)
+                self.callback_openDetailWindow(poi);
+            }
+        });
+     })
+     map.on('click', function() {
+      console.log("click!!   ", self.markerEnableTag)
+      if (self.markerEnableTag) {
+        self.closeInfoWindow()
+        self.markerEnableTag = false;
+      }
+     })
     })
+
         self.map = map
     }
   },
@@ -190,5 +222,4 @@ a {
   color: #42b983;
 }
 #container {width:1280px; height: 720px; margin: auto; }
-#amap-sug-result {}
 </style>

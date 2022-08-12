@@ -5,12 +5,12 @@
   <el-row :gutter=2>
     <el-col :span="20">
       <div class="grid-content ep-bg-purple">
-        <DefaultMap :height="1800" :width="1800"/>
+        <DefaultMap :height="1800" :width="1800" @addPOi="addPOi1"/>
       </div>
     </el-col>
     <el-col :span="4">
       <div class="grid-content ep-bg-purple">
-        <button/>
+        <CollectPoiList/>
       </div>
     </el-col>
   </el-row>
@@ -19,11 +19,18 @@
 
 <script>
 import DefaultMap from './components/DefaultMap.vue'
+import CollectPoiList from './components/CollectPoiList.vue'
 
 export default {
   name: 'App',
   components: {
-    DefaultMap
+    DefaultMap,
+    CollectPoiList
+},
+method: {
+  addPOi1(name) {
+    console.log("parent addPOi", name)
+  }
 }
 }
 </script>
