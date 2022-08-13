@@ -10,7 +10,9 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "element-plus": "^2.2.12",
-    "vue": "^3.2.13"
+    "mitt": "^3.0.0",
+    "vue": "^3.2.13",
+    "vue-bus": "^1.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

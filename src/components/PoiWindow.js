@@ -1,11 +1,11 @@
 import { createApp } from "vue";
 import PoiWindow from './PoiWindow.vue'
 
-function createPoiWindow(name, detail, image) {
+function createPoiWindow(poiDetail, image, cb) {
     const instance = createApp(PoiWindow, {
-        name,
-        detail,
-        image
+        poiDetail,
+        image,
+        cb
     })
 
     const node = document.createElement('div');

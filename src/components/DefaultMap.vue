@@ -1,26 +1,5 @@
 <template>
   <div class="hello">
-    <!-- <div>
-      <el-autocomplete
-        v-model="keyword"
-        :fetch-suggestions="querySearch"
-        :trigger-on-focus="false"
-        clearable
-        class="inline-input w-50"
-        placeholder="Please Input"
-        @select="handleSelect"
-      >
-    <template #suffix>
-      <el-icon class="el-input__icon">
-        <edit />
-      </el-icon>
-    </template>
-    <template #default="{ item }">
-      <div class="value">{{ item.name }}</div>
-      <span class="link">{{ item.district }}</span>
-    </template>      
-      </el-autocomplete>
-      </div> -->
       <div style="width: 50%; margin: auto">
         <input class="el-input__inner" id="search-poi" placeholder="Please input" />
       </div>
@@ -33,6 +12,7 @@
 <script>
 import AMap from 'AMap'
 import createPoiWindow from './PoiWindow.js'
+import bus from '@/utils/bus'
 
 export default {
   name: 'GMap',
@@ -59,8 +39,9 @@ export default {
       handleSelect(item) {
         console.log(item)
     },
-      addPOi(name) {
-    console.log("child addPOi", name)
+  addPOi(poi) {
+     this.$emit("add-poi", poi)
+     bus.emit('addPoiToList', poi)
   },
     querySearch(key, cb) {
         this.autocomplete.search(key, function(status, result) {
@@ -91,9 +72,12 @@ export default {
         }
         let photos = poiDetail.photos;
         var image = (photos.length == 0) ? '../assets/logo.png' : photos[0].url;
+        let self = this;
         var infoWindow = new AMap.InfoWindow({
           isCustom: true,  //使用自定义窗体
-          content: createPoiWindow(poiDetail.name, poiDetail.address, image),
+          content: createPoiWindow(poiDetail, image, function(p) {
+            self.addPOi(p)
+          }),
         });
         infoWindow.open(this.map, this.aimMarker.getPosition());
         this.markerEnableTag = true;

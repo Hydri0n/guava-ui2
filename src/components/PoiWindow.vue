@@ -7,9 +7,9 @@
         </div>
 
         <div style="padding: 14px">
-          <span>{{ name }}</span>
+          <span>{{ poiDetail.name }}</span>
           <div class="bottom">
-            <div class="text-sm">{{ detail }}</div>
+            <div class="text-sm">{{ poiDetail.detail }}</div>
                 <button class="el-button is-text button" aria-disabled="false" type="button" @click="addPoi">
                     <span class="">添加</span>
                 </button>
@@ -22,14 +22,14 @@
 export default {
     name: 'poiWindow',
 props: {
-        name: null,
-        detail: null,
-        image: null
+        poiDetail: null,
+        image: null,
+        cb: { type: Function }
     },
     methods: {
       addPoi() {
-        console.log("addPOi....");
-        this.$emit("addPOi", this.name)
+        console.log(">>>>>", this.cb)
+        this.cb(this.poiDetail);
       }
     }
 }

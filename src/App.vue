@@ -2,10 +2,10 @@
   <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
     <h3>松哥の地图</h3>
     <p/>
-  <el-row :gutter=2>
+  <el-row>
     <el-col :span="20">
       <div class="grid-content ep-bg-purple">
-        <DefaultMap :height="1800" :width="1800" @addPOi="addPOi1"/>
+        <DefaultMap :height="1800" :width="1800" @add-poi="addPoiToList"/>
       </div>
     </el-col>
     <el-col :span="4">
@@ -28,8 +28,9 @@ export default {
     CollectPoiList
 },
 method: {
-  addPOi1(name) {
+  addPoiToList(name) {
     console.log("parent addPOi", name)
+
   }
 }
 }
