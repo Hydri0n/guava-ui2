@@ -1,6 +1,7 @@
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
     <h3>松哥の地图</h3>
+    <el-rate v-model="value"/>
     <p/>
   <el-row>
     <el-col :span="20">
@@ -22,6 +23,11 @@ import DefaultMap from './components/DefaultMap.vue'
 import CollectPoiList from './components/CollectPoiList.vue'
 
 export default {
+  data() {
+    return {
+        value : 5
+    }
+  },
   name: 'App',
   components: {
     DefaultMap,
